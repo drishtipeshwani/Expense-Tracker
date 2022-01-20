@@ -1,24 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import SuperTokens, { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react";
+import ThirdPartyEmailPassword, { Google } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
+import Session from "supertokens-auth-react/recipe/session";
+import Home from './Home';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+SuperTokens.init({
+  appInfo: {
+    appName: "Expense Tracker",
+    apiDomain: "http://localhost:3001",
+    websiteDomain: "http://localhost:3000"
+  },
+  recipeList: [
+    ThirdPartyEmailPassword.init({
+      signInAndUpFeature: {
+        providers: [
+          Google.init()
+        ]
+      }
+    }),
+    Session.init()
+  ]
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {getSuperTokensRoutesForReactRouterDom(require("react-router-dom"))}
+        <Route path="/" element={<Home />}></Route>
+      </Routes>
+    </Router>
   );
 }
 
