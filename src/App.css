@@ -3,12 +3,3 @@
   justify-content: space-between;
   text-align: center;
 }
-
-.input-ctn{
-  display: flex;
-  text-align: center;
-}
-
-.input-ctn button{
-  margin-left: 10px;
-}

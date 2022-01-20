@@ -10,6 +10,7 @@ import ThirdPartyEmailPassword, { Google } from "supertokens-auth-react/recipe/t
 import Session from "supertokens-auth-react/recipe/session";
 import Home from './Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import wallet from './wallet.png';
 
 SuperTokens.init({
   appInfo: {
@@ -19,12 +20,30 @@ SuperTokens.init({
   },
   recipeList: [
     ThirdPartyEmailPassword.init({
+    
+       override: {
+        components: {
+            EmailPasswordSignInHeader: ({ DefaultComponent, ...props }) => {
+                return (
+                  <>
+                    <div>
+                      <div className="custom-ctn">
+                         <img src={wallet} style={{"width":"100px"}} alt='wallet'/>
+                        <h1 style={{color: "#24A19C",fontWeight:700}}>Personal Expense Tracker</h1>
+                      </div>
+                        <DefaultComponent {...props} />
+                    </div> 
+                    </> 
+                );
+            },
+        },
       signInAndUpFeature: {
         providers: [
           Google.init()
         ]
       }
-    }),
+       }
+  }),
     Session.init()
   ]
 });

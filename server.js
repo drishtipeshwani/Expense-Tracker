@@ -23,11 +23,9 @@ supertokens.init({
     recipeList: [
         ThirdPartyEmailPassword.init({
             providers: [
-                // We have provided you with development keys which you can use for testsing.
-                // IMPORTANT: Please replace them with your own OAuth keys for production use.
                 Google({
-                    clientId: "1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
-                    clientSecret: "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"
+                    clientId: "", //Add your client id here
+                    clientSecret: "" //Add your client secret here
                 })
             ]
         }),
@@ -70,7 +68,7 @@ app.get("/get-user-info", verifySession(), async (req, res) => {
 
 app.get(`/data`, verifySession(), async (req, res) => {
     const userId = req.session.userId;
-    database.getList(userId)
+    database.getData(userId)
         .then(response => {
             res.status(200).send(response);
         })
@@ -78,6 +76,17 @@ app.get(`/data`, verifySession(), async (req, res) => {
             res.status(500).send(error);
         })
 })
+
+app.post('/create-budget', (req, res) => {
+    database.createBudget(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+
 
 app.post('/update-budget', (req, res) => {
     database.updateBudget(req.body)

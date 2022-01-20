@@ -1,18 +1,14 @@
 import React from 'react';
-import { ExpenseItem } from './ExpenseItem';
 
-const ExpenseList = () => {
-
-    const expenses = [
-        { id: 12, name: 'shopping', cost: 40 },
-        { id: 13, name: 'holiday', cost: 400 },
-        { id: 14, name: 'car service', cost: 50 },
-    ];
+const ExpenseList = (props) => {
 
     return <div className='expense-list'>
         <ul className='list-group'>
-            {expenses.map((expense) => (
-                <ExpenseItem id={expense.id} name={expense.name} cost={expense.cost} />
+            {props.expenseList.map((expense) => (
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                    {expense.item}
+                    <span className="badge bg-info badge-pill">Rs. {expense.amount}</span>
+                </li>
             ))}
         </ul>
     </div>;

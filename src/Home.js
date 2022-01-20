@@ -11,6 +11,8 @@ function Home() {
     const [user, setUser] = React.useState(null); //userID
     const [budget, setBudget] = React.useState(0);  //budget for the user
     const [expenseList, setExpenseList] = React.useState([]); //list of expenses for the user
+    const [totalExpense, setTotalExpense] = React.useState(0); //total expense for the user
+    const [remainingAmount, setRemainingAmount] = React.useState(0); //Remaining amount for the user
 
     useEffect(() => {
         //get userId from session
@@ -22,11 +24,8 @@ function Home() {
             }
         }
         getUser();
-    }, []);
-
-    useEffect(() => {
         getDataForUser();
-    }, [user])
+    }, []);
 
     //To get the Budget and list of expenses for a particular user
     function getDataForUser() {
@@ -34,57 +33,48 @@ function Home() {
             .then(response => {
                 return response.json();
             }).then(data => {
-                console.log(data.rows[0]);
-                //setBudget(data.budget);
-                //setExpenseList(data.expenses);
+                console.log(data);
+                setBudget(parseInt(data[0].budget));
+                let list = []
+                let totalAmount = 0;
+                data.map((row) => {
+                    if (row.item && row.amount) {
+                        let expense = { 'item': row.item, 'amount': parseInt(row.amount) }
+                        totalAmount += parseInt(row.amount);
+                        list.push(expense);
+                    }
+                })
+                setExpenseList(list);
+                setTotalExpense(totalAmount);
+                setRemainingAmount(data[0].budget - totalAmount);
             })
     }
-
-    function handleBudgetChange(budget) {
-
-        fetch('http://localhost:3001/update-budget', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ budget }),
-        })
-            .then(response => {
-                return response.text();
-            })
-            .then(data => {
-                alert(data);
-                getDataForUser();
-            });
-    }
-
-
 
     return (
         <ThirdPartyEmailPasswordAuth>  {/*Wrapping the component to make sure that only Signed In User can access this page*/}
             <div className='container'>
-                <Header handleBudgetChange={handleBudgetChange} />
+                <Header getDataForUser={getDataForUser} user={user} budget={budget} />
                 <div className='row mt-3'>
                     <div className='col-sm'>
                         <Record class={"alert alert-secondary"} title={"Budget"} amount={budget} />
                     </div>
                     <div className='col-sm'>
-                        <Record class={"alert alert-success"} title={"Remaining"} amount={budget} />
+                        <Record class={"alert alert-success"} title={"Remaining"} amount={remainingAmount} />
                     </div>
                     <div className='col-sm'>
-                        <Record class={"alert alert-primary"} title={"Spent so far"} amount={budget} />
+                        <Record class={"alert alert-primary"} title={"Spent so far"} amount={totalExpense} />
                     </div>
                 </div>
                 <h3 className='mt-3'>Expenses</h3>
                 <div className='row mt-3'>
                     <div className='col-sm'>
-                        <ExpenseList />
+                        <ExpenseList expenseList={expenseList} />
                     </div>
                 </div>
                 <h3 className='mt-3'>Add Expense</h3>
                 <div className='row mt-3'>
                     <div className='col-sm'>
-                        <AddExpenseForm />
+                        <AddExpenseForm getDataForUser={getDataForUser} user={user} budget={budget} />
                     </div>
                 </div>
             </div>
