@@ -7,13 +7,15 @@ import { useSessionContext } from 'supertokens-auth-react/recipe/session';
 
 function Home() {
 
-    let { user, accessTokenPayload } = useSessionContext(); //Getting user details from session context
+    let { userId, accessTokenPayload } = useSessionContext(); //Getting user details from session context
+    const [user, setUser] = React.useState('');
     const [budget, setBudget] = React.useState(0);  //budget for the user
     const [expenseList, setExpenseList] = React.useState([]); //list of expenses for the user
     const [totalExpense, setTotalExpense] = React.useState(0); //total expense for the user
     const [remainingAmount, setRemainingAmount] = React.useState(0); //Remaining amount for the user
 
     useEffect(() => {
+        setUser(userId)
         getDataForUser();
     }, []);
 

@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require("express");
 let supertokens = require("supertokens-node");
 let cors = require("cors");

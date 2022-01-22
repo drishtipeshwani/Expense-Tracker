@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const Pool = require('pg').Pool
 const pool = new Pool({    //Add your postgres database credentials here
     user: process.env.DATABASE_USER,
