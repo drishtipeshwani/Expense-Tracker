@@ -8,14 +8,12 @@ import { useSessionContext } from 'supertokens-auth-react/recipe/session';
 function Home() {
 
     let { userId, accessTokenPayload } = useSessionContext(); //Getting user details from session context
-    const [user, setUser] = React.useState('');
     const [budget, setBudget] = React.useState(0);  //budget for the user
     const [expenseList, setExpenseList] = React.useState([]); //list of expenses for the user
     const [totalExpense, setTotalExpense] = React.useState(0); //total expense for the user
     const [remainingAmount, setRemainingAmount] = React.useState(0); //Remaining amount for the user
 
     useEffect(() => {
-        setUser(userId)
         getDataForUser();
     }, []);
 
@@ -44,7 +42,7 @@ function Home() {
 
     return (
         <div className='container'>
-            <Header getDataForUser={getDataForUser} user={user} budget={budget} />
+            <Header getDataForUser={getDataForUser} user={userId} budget={budget} />
             <div className='row mt-3'>
                 <div className='col-sm'>
                     <Record class={"alert alert-secondary"} title={"Budget"} amount={budget} />
@@ -65,7 +63,7 @@ function Home() {
             <h3 className='mt-3'>Add Expense</h3>
             <div className='row mt-3'>
                 <div className='col-sm'>
-                    <AddExpenseForm getDataForUser={getDataForUser} user={user} budget={budget} />
+                    <AddExpenseForm getDataForUser={getDataForUser} user={userId} budget={budget} />
                 </div>
             </div>
         </div>
