@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import SuperTokens, { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react";
 import ThirdPartyEmailPassword, { Google } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
+import {ThirdPartyEmailPasswordAuth} from "supertokens-auth-react/recipe/thirdpartyemailpassword";
 import Session from "supertokens-auth-react/recipe/session";
 import Home from './Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -53,7 +54,11 @@ function App() {
     <Router>
       <Routes>
         {getSuperTokensRoutesForReactRouterDom(require("react-router-dom"))}
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={
+         <ThirdPartyEmailPasswordAuth>  {/*Wrapping the component to make sure that only Signed In User can access this page*/}
+             <Home />
+         </ThirdPartyEmailPasswordAuth>
+        }></Route>
       </Routes>
     </Router>
   );

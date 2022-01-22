@@ -1,29 +1,19 @@
 import React, { useEffect } from 'react';
-import { ThirdPartyEmailPasswordAuth } from 'supertokens-auth-react/recipe/thirdpartyemailpassword'
 import Header from './components/Header';
 import Record from './components/Record';
 import ExpenseList from './components/ExpenseList';
 import AddExpenseForm from './components/AddExpenseForm';
-import Session from 'supertokens-auth-react/recipe/session';
+import { useSessionContext } from 'supertokens-auth-react/recipe/session';
 
 function Home() {
 
-    const [user, setUser] = React.useState(null); //userID
+    let { user, accessTokenPayload } = useSessionContext(); //Getting user details from session context
     const [budget, setBudget] = React.useState(0);  //budget for the user
     const [expenseList, setExpenseList] = React.useState([]); //list of expenses for the user
     const [totalExpense, setTotalExpense] = React.useState(0); //total expense for the user
     const [remainingAmount, setRemainingAmount] = React.useState(0); //Remaining amount for the user
 
     useEffect(() => {
-        //get userId from session
-        const getUser = async () => {
-            if (await Session.doesSessionExist()) {
-                let userId = await Session.getUserId();
-                setUser(userId);
-                console.log(userId);
-            }
-        }
-        getUser();
         getDataForUser();
     }, []);
 
@@ -51,34 +41,32 @@ function Home() {
     }
 
     return (
-        <ThirdPartyEmailPasswordAuth>  {/*Wrapping the component to make sure that only Signed In User can access this page*/}
-            <div className='container'>
-                <Header getDataForUser={getDataForUser} user={user} budget={budget} />
-                <div className='row mt-3'>
-                    <div className='col-sm'>
-                        <Record class={"alert alert-secondary"} title={"Budget"} amount={budget} />
-                    </div>
-                    <div className='col-sm'>
-                        <Record class={"alert alert-success"} title={"Remaining"} amount={remainingAmount} />
-                    </div>
-                    <div className='col-sm'>
-                        <Record class={"alert alert-primary"} title={"Spent so far"} amount={totalExpense} />
-                    </div>
+        <div className='container'>
+            <Header getDataForUser={getDataForUser} user={user} budget={budget} />
+            <div className='row mt-3'>
+                <div className='col-sm'>
+                    <Record class={"alert alert-secondary"} title={"Budget"} amount={budget} />
                 </div>
-                <h3 className='mt-3'>Expenses</h3>
-                <div className='row mt-3'>
-                    <div className='col-sm'>
-                        <ExpenseList expenseList={expenseList} />
-                    </div>
+                <div className='col-sm'>
+                    <Record class={"alert alert-success"} title={"Remaining"} amount={remainingAmount} />
                 </div>
-                <h3 className='mt-3'>Add Expense</h3>
-                <div className='row mt-3'>
-                    <div className='col-sm'>
-                        <AddExpenseForm getDataForUser={getDataForUser} user={user} budget={budget} />
-                    </div>
+                <div className='col-sm'>
+                    <Record class={"alert alert-primary"} title={"Spent so far"} amount={totalExpense} />
                 </div>
             </div>
-        </ThirdPartyEmailPasswordAuth>
+            <h3 className='mt-3'>Expenses</h3>
+            <div className='row mt-3'>
+                <div className='col-sm'>
+                    <ExpenseList expenseList={expenseList} />
+                </div>
+            </div>
+            <h3 className='mt-3'>Add Expense</h3>
+            <div className='row mt-3'>
+                <div className='col-sm'>
+                    <AddExpenseForm getDataForUser={getDataForUser} user={user} budget={budget} />
+                </div>
+            </div>
+        </div>
     )
 }
 

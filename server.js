@@ -12,7 +12,7 @@ supertokens.init({
     framework: "express",
     supertokens: {
         // try.supertokens.io is for demo purposes. Replace this with the address of your core instance (sign up on supertokens.io), or self host a core.
-        connectionURI: "https://try.supertokens.io",
+        connectionURI: process.env.SUPERTOKENS_CONNECTION_URI || "https://try.supertokens.io",
         // apiKey: "IF YOU HAVE AN API KEY FOR THE CORE, ADD IT HERE",
     },
     appInfo: {
@@ -24,8 +24,8 @@ supertokens.init({
         ThirdPartyEmailPassword.init({
             providers: [
                 Google({
-                    clientId: "", //Add your client id here
-                    clientSecret: "" //Add your client secret here
+                    clientId: process.env.CLIENT_ID,
+                    clientSecret: process.env.CLIENT_SECRET
                 })
             ]
         }),
